@@ -2,11 +2,13 @@ import test from 'tape';
 import profiler from './index.js';
 
 test('Should profile a callback based function', (t) => {
-    t.plan(2);
+    t.plan(3);
     const tolerance = 3; 
     const testDuration = 50;
     const testResponse = {};
-    const testFn = callback => {
+    const testArgument = {};
+    const testFn = (arg, callback) => {
+        t.equal(arg, testArgument, 'Arguments are forwarded')
         setTimeout(() => {callback(null, testResponse)}, testDuration);
     };
     const testCallback = (err, result) => {
@@ -19,15 +21,17 @@ test('Should profile a callback based function', (t) => {
 
     const profiledFn = profiler(testFn, reporter);
 
-    profiledFn(testCallback);
+    profiledFn(testArgument, testCallback);
 });
 
 test('Should profile a promise based function', (t) => {
-    t.plan(2);
+    t.plan(3);
     const tolerance = 3; 
     const testDuration = 50;
     const testResponse = {};
-    const testFn = () => {
+    const testArgument = {};
+    const testFn = (arg) => {
+        t.equal(arg, testArgument, 'Arguments are forwarded')
         return new Promise(resolve => {
             setTimeout(() => {resolve(testResponse)}, testDuration);
         });
@@ -37,7 +41,7 @@ test('Should profile a promise based function', (t) => {
         t.assert(Math.abs(duration - testDuration) <= tolerance, 'Duration measurement is within tolerance');
     }
 
-    Promise.resolve()
+    Promise.resolve(testArgument)
         .then(profiler(testFn, reporter))
         .then(result => t.equal(result, testResponse, 'Promise chain is continued'));
 });
@@ -63,11 +67,13 @@ test('Should profile a promise based function that rejects', (t) => {
 });
 
 test('Should profile a normal function', (t) => {
-    t.plan(2);
+    t.plan(3);
     const tolerance = 3; 
     const testDuration = 50;
     const testResponse = {};
-    const testFn = function () {
+    const testArgument = {};
+    const testFn = function (arg) {
+        t.equal(arg, testArgument, 'Arguments are forwarded')
         let start = Date.now();
         while(Date.now() < start + testDuration ) {};
         return testResponse;
@@ -79,7 +85,7 @@ test('Should profile a normal function', (t) => {
 
     const profiledFn = profiler(testFn, reporter)
 
-    t.equal(profiledFn(), testResponse, 'Returns correct value');
+    t.equal(profiledFn(testArgument), testResponse, 'Returns correct value');
 });
 
 test('Should profile an object method', (t) => {
