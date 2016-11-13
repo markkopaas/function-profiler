@@ -1,5 +1,5 @@
-import test from 'tape';
-import profiler from './index.js';
+const test = require('tape');
+const profiler = require('./index.js');
 
 test('Should profile a callback based function', (t) => {
     t.plan(3);

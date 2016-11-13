@@ -1,4 +1,4 @@
-export default (originalFn, reporter, timer) => {
+module.exports = (originalFn, reporter, timer) => {
     if(typeof reporter !== 'function') {
         reporter = (duration) => console.log('Function call duration(' + originalFn.name + '): ' + duration);
     }
