@@ -1,0 +1,18 @@
+{
+  "name": "function-profiler",
+  "version": "1.0.0",
+  "description": "Duration of function execution",
+  "keywords": ["profiler", "callback","promise", "duration"],
+  "main": "index.js",
+  "scripts": {
+    "test": "tape-watch -1 -r babel-register test.js",
+    "watch": "tape-watch -r babel-register test.js"
+  },
+  "author": "Markko Paas",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.18.0",
+    "babel-register": "^6.18.0",
+    "tape-watch": "^2.2.3"
+  }
+}
